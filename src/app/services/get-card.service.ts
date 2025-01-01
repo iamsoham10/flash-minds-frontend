@@ -7,8 +7,8 @@ import { Observable, of, tap } from 'rxjs';
 })
 export class GetCardService {
   private cardCache: any[] | null = null;
-  getCardsAPI = "http://localhost:3000/api/cards/readcard";
-  exploreCardsAPI = "http://localhost:3000/api/cards/readcard?user_id=320dbb16-ca93-47e2-8388-734db51fa750";
+  getCardsAPI = "https://flash-minds-backend.onrender.com/api/cards/readcard";
+  exploreCardsAPI = "https://flash-minds-backend.onrender.com/api/cards/readcard?user_id=320dbb16-ca93-47e2-8388-734db51fa750";
   constructor(private http: HttpClient) { }
 
   getCards(user_id: string): Observable<any> {

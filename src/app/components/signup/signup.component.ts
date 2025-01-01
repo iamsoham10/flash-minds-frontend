@@ -70,7 +70,7 @@ export class SignupComponent {
       this.isLoadingLogIn = true;
       this.register.logUserIn(this.userLoginForm.value).subscribe(
         (response) => {
-          console.log("logged in 😎");
+          // console.log("logged in 😎");
           this.isLoadingLogIn = false;
           localStorage.removeItem('jwttoken');
           localStorage.setItem('jwttoken', response.token);

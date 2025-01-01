@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class AddCardService {
 
   constructor(private http: HttpClient) { }
-  addCardAPI = "http://localhost:3000/api/cards/addcard";
+  addCardAPI = "https://flash-minds-backend.onrender.com/api/cards/addcard";
 
   addSet(cards: object): Observable<object> {
     return this.http.post(this.addCardAPI, cards);

@@ -45,7 +45,7 @@ export class DashboardComponent implements OnInit {
         this.getUniqueSubjects(this.cardList);
         this.subject = this.route.snapshot.paramMap.get('subject') || '';
         this.filteredCardList = this.cardList.filter(card => card.username === this.CurrentUserName);
-        console.log('Filtered cards: ', this.filteredCardList);
+        // console.log('Filtered cards: ', this.filteredCardList);
       },
       error: (err) => {
         console.log('error fetching', err);

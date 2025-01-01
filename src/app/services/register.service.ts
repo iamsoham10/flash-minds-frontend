@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class RegisterService {
-  registerAPI: string = "http://localhost:3000/api/users/register";
-  logInAPI: string = "http://localhost:3000/api/users/login";
+  registerAPI: string = "https://flash-minds-backend.onrender.com/api/users/register";
+  logInAPI: string = "https://flash-minds-backend.onrender.com/api/users/login";
   constructor(private http: HttpClient) { }
 
   registerUser(user: object): Observable<object> {

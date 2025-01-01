@@ -82,7 +82,7 @@ export class StudyComponent implements OnInit {
     const user_id = decodedToken.user_id;
     this.streakService.markStreak(user_id);
     this.streak = this.streakService.getUserStreak(user_id);
-    console.log(this.streak);
+    // console.log(this.streak);
     if (this.currentCardIndex < this.cardList.length - 1) {
       this.currentCardIndex++;
     } else if (this.currentCardIndex >= this.cardList.length - 1) {
@@ -113,7 +113,7 @@ export class StudyComponent implements OnInit {
         this.cardList = data.cards;
         this.subject = this.route.snapshot.paramMap.get('subject') || '';
         this.filteredCardList = this.cardList.filter(card => card.subject === this.subject);
-        console.log('Filtered cards: ', this.filteredCardList);
+        // console.log('Filtered cards: ', this.filteredCardList);
         this.initializeForm();
       },
       error: (err) => {
@@ -161,13 +161,13 @@ export class StudyComponent implements OnInit {
   showMatchDiv = false;
   matchCards: any[] = [];
   showMatch() {
-    console.log(this.filteredCardList);
+    // console.log(this.filteredCardList);
     this.showMatchDiv = true;
     this.showCardDiv = false;
     this.matchCards = this.getRandomCards(this.filteredCardList);
-    console.log("selected random cards: ", this.matchCards);
+    // console.log("selected random cards: ", this.matchCards);
     this.initializeMatchMode();
-    console.log('shuffled studd: ', this.shuffledPairs);
+    // console.log('shuffled studd: ', this.shuffledPairs);
   }
 
   // this function selects a random element from the array and then shuffles the array and finally returns the shuffled array
@@ -225,7 +225,7 @@ export class StudyComponent implements OnInit {
       this.shuffledPairs = this.shuffledPairs.filter(
         pair => pair.id !== first.id
       );
-      console.log('shuffledPairs after: ', this.shuffledPairs);
+      // console.log('shuffledPairs after: ', this.shuffledPairs);
     } else {
       alert('Incorrect Match. Try Again.');
     }
@@ -249,13 +249,13 @@ export class StudyComponent implements OnInit {
     this.showCardDiv = false;
     this.filteredCardListSignal.set(this.getFilteredCards());
     this.initializeCardStates();
-    console.log('Filtered cards: ', this.filteredCardListSignal());
+    // console.log('Filtered cards: ', this.filteredCardListSignal());
   }
 
 
   initializeCardStates() {
     const filteredCards = this.filteredCardListSignal();
-    console.log("cards:", filteredCards);
+    // console.log("cards:", filteredCards);
     filteredCards.forEach(card => {
       this.cardStates.set(card._id, {
         showAnswer: false,

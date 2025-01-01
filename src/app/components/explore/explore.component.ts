@@ -33,7 +33,7 @@ export class ExploreComponent implements OnInit {
     this.getCardService.getExploreCards().subscribe({
       next: (data) => {
         this.cardList = data.cards;
-        console.log('cards fetched successfully', this.cardList);
+        // console.log('cards fetched successfully', this.cardList);
         this.categorizedSubjects = this.groupSubjectsByCategory(this.cardList);
       },
       error: (err) => {
