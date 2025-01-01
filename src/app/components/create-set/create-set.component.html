@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Set</title>
+</head>
+
+<body>
+    <app-navbar></app-navbar>
+    <section class="bg-gray-100 h-screen">
+        <h1 class="text-4xl font-body font-bold text-primary p-10">Create a new flashcards set</h1>
+        <div>
+            <form [formGroup]="createSetForm" action="saveSet()">
+                <div class="mx-10 flex flex-col border rounded-lg bg-white p-6 shadow-lg">
+                    <label for="subject-name" class="text-2xl font-body text-primary font-semibold ">Subject</label>
+                    <input type="text" name="subject" placeholder="Enter subject name" formControlName="subject"
+                        class="bg-gray-300 rounded-lg mt-4 p-4 w-6/6">
+                    @if(createSetForm.get('subject')?.touched && createSetForm.get('subject')?.hasError('required')){
+                    <span class="text-red-600">Please fill all the fields</span>
+                    }
+
+                    <!-- game baja dala -->
+                    <div class="flex-col">
+                        <div *ngFor="let card of cards; let i = index" [formGroup]="card">
+                            <div class="relative my-6 border rounded-lg bg-gray-100 p-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <p class="text-xl">Card {{ i + 1 }}</p>
+                                    <button (click)="removeCard(i)">
+                                        <i
+                                            class="fa-solid fa-trash ml-12 text-red-600 rounded-full border border-gray-700 p-4"></i>
+                                    </button>
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-12 md:gap-6 justify-center">
+                                    <input type="text" name="term" placeholder="Enter question" formControlName="term"
+                                        class="bg-gray-300 rounded-lg px-4 py-6 w-full md:w-1/2">
+
+                                    <input type="text" name="definition" placeholder="Enter answer"
+                                        formControlName="definition"
+                                        class="bg-gray-300 rounded-lg px-4 py-6 w-full md:w-1/2">
+                                </div>
+                                @if(card.get('term')?.touched && card.get('term')?.hasError('required') ||
+                                card.get('definition')?.touched && card.get('definition')?.hasError('required')){
+                                <span class="text-red-600">Please fill all the fields</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="flex justify-start items-center gap-4 mt-4">
+                            <button class="bg-secondary text-white px-6 py-2 rounded-lg hover:opacity-80"
+                                (click)="addCard()">
+                                Add Card
+                            </button>
+                            <button class="bg-primary text-white px-6 py-2 rounded-lg hover:opacity-80"
+                                (click)="saveSet()">
+                                @if(isSetSaved){
+                                <i class="fa-solid fa-circle-notch fa-spin text-3xl text-white"></i>
+                                } @else{
+                                Save Set
+                                }
+                            </button>
+                            @if(showCardWarining && cards.length === 0){
+                            <span class="text-red-600">Create at least one card</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

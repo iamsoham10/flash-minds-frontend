@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <app-navbar></app-navbar>
+    <!-- Dashboard Content -->
+    <main class="container mx-auto px-8 py-12 bg-gray-100">
+        <h1 class="text-4xl font-bold font-display text-primary mb-8">Dashboard</h1>
+
+        <!-- Stats Section -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+                <h3 class="text-2xl font-semibold text-secondary">Total Cards</h3>
+                <p class="text-4xl font-bold text-primary mt-4">{{cardList.length}}</p>
+            </div>
+            <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+                <h3 class="text-2xl font-semibold text-secondary">Study Streak</h3>
+                <p class="text-4xl font-bold text-primary mt-4">{{ streak() }}</p>
+            </div>
+            <div class="bg-white rounded-lg p-6 shadow-lg text-center">
+                <h3 class="text-2xl font-semibold text-secondary">Total Sets</h3>
+                <p class="text-4xl font-bold text-primary mt-4">{{ getUniqueSubjects(cardList).length }}</p>
+            </div>
+        </section>
+
+        <!-- My Cards Section -->
+        <section>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-primary">My Cards</h2>
+                <button class="bg-secondary text-white px-6 py-2 rounded-lg hover:bg-secondary-dark transition-colors"
+                    routerLink="/create-set">
+                    Create New Set
+                </button>
+            </div>
+            @if(filteredCardList.length === 0){
+            <p class="text-primary text-3xl text-center p-6">No cards found. Create a new set to get started.</p>
+            }
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                <div *ngFor="let subject of getUniqueSubjects(cardList)"
+                    class="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold text-primary mb-4">{{subject}}</h3>
+                    <p class="text-gray-600">{{getCardCountBySubject(subject)}} Cards</p>
+                    <button
+                        class="mt-4 text-white bg-secondary px-4 py-2 rounded-lg hover:bg-secondary-dark transition-colors"
+                        [routerLink]="['/dashboard/explore/study', subject]">
+                        Study Now
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bottom-0 w-full bg-gray-800 text-gray-400 py-5 text-center">
+        <p>© 2024 Developed By Soham</p>
+    </footer>
+    <router-outlet></router-outlet>
+</body>
+
+</html>

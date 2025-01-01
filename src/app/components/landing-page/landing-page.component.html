@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+</head>
+
+<body>
+    <nav class="p-3 flex justify-between items-center bg-background">
+        <a href="#" class="flex gap-2 items-center flex-1 pl-0 sm:pl-4">
+            <img src="assets/logo.png" alt="logo" class="max-w-12 max-h-12">
+            <span class="text-4xl font-bold font-display text-primary">FlashMinds</span>
+        </a>
+        <div id="nav-menu" class="items-center hidden md:flex gap-12 pr-8">
+            <a href="#" class="font-display font-semibold text-primary hover:text-secondary scroll-smooth"
+                href="#explore">Explore</a>
+            <button routerLink="/dashboard">
+                <a class=" font-display font-semibold text-primary hover:text-secondary">My Cards</a></button>
+            <div class="hidden md:flex flex-1 justify-end">
+                <button routerLink="/auth"
+                    class="items-center flex gap-2 border border-secondary px-4 py-2 rounded-lg text-secondary hover:border-secondary hover:bg-secondary hover:text-white">
+                    <span>Sign Up</span>
+                </button>
+            </div>
+        </div>
+        <button class="md:hidden p-2 text-xl" (click)="toggleMenu()">
+            <i class="fa-solid fa-bars text-primary"></i>
+        </button>
+        <div *ngIf="isMenuOpened" class="fixed bg-background inset-0 p-3">
+            <div id="nav-bar" class="flex justify-between pl-2">
+                <a href="#" class="flex gap-2 items-center flex-1">
+                    <img src="assets/logo.png" alt="logo" class="max-w-12 max-h-12">
+                    <span class="text-4xl font-bold font-display text-primary">FlashMinds</span>
+                </a>
+                <button class="md:hidden p-2 text-xl" (click)="toggleMenu()">
+                    <i class="fa-solid fa-xmark text-primary"></i>
+                </button>
+            </div>
+            <div class="p-4 flex flex-col gap-4">
+                <ng-container *ngFor="let link of navLinks">
+                    <a [routerLink]="link.path"
+                        class="font-display text-lg text-primary hover:bg-gray-200 p-4 rounded-lg">{{ link.label }}</a>
+                </ng-container>
+                <div class="h-[1px] bg-gray-800 m-2"></div>
+                <button routerLink="/auth"
+                    class="items-center flex gap-2 p-4 rounded-lg text-primary hover:bg-gray-200">
+                    <span>Sign Up</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <main class="bg-background scroll-smooth" [@floatUp]>
+        <section id="hero-container" class="flex flex-col items-center">
+            <h1 class="font-display text-4xl ml-4 font-bold text-primary mt-12 sm:text-6xl">
+                Learn Smarter with FlashMinds
+            </h1>
+            <p class="font-display text-xl py-8 m-4 font-semibold text-primary">
+                Create and study flashcards. Build streaks and stay motivated to achieve your learning goals!
+            </p>
+            <div id="hero-buttons" class="gap-8 mt-10 flex flex-col sm:flex-row">
+                <ng-container *ngFor="let button of heroButtons">
+                    <button [routerLink]="button.path"
+                        class="text-body text-white bg-secondary font-semibold px-8 py-3 rounded-lg w-40">
+                        {{ button.label }}
+                    </button>
+                </ng-container>
+            </div>
+        </section>
+        <section class="mt-12 px-8 bg-sub_card">
+            <h2 class="text-4xl font-semibold font-display text-primary text-center pt-12">Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-12">
+                <ng-container *ngFor="let feature of features">
+                    <div class="bg-gray-100 rounded-lg py-10 text-center shadow-lg">
+                        <i [class]="feature.icon" [ngClass]="feature.iconColor + ' text-4xl mb-4'"></i>
+                        <h3 class="font-semibold text-primary font-body text-xl">{{ feature.title }}</h3>
+                        <p class="text-primary font-body mt-4">{{ feature.description }}</p>
+                    </div>
+                </ng-container>
+            </div>
+        </section>
+        <section id="explore" class="px-8 bg-card">
+            <h2 class="text-4xl font-semibold font-display text-primary text-center pt-12">Explore Cards</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 py-12">
+                <ng-container *ngFor="let card of exploreCards">
+                    <div
+                        class="bg-white rounded-lg p-6 text-start shadow-lg mb-2 hover:scale-105 transition-transform ease-in-out duration-300 hover:opacity-90">
+                        <h3 class="font-semibold text-primary font-body text-xl mb-6">{{ card.title }}</h3>
+                        <p class="inline bg-gray-300 rounded-full px-2 font-body text-primary">{{ card.count }} Cards
+                        </p>
+                        <div class="flex justify-start items-center mt-12 gap-3">
+                            <p class="flex items-center justify-center text-white w-10 h-10 rounded-full bg-red-700">
+                                {{ card.initial }}
+                            </p>
+                            <p class="text-gray-500 font-body font-bold">{{ card.author }}</p>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </section>
+        <section id="study-modes" class="py-16 bg-sub_card">
+            <div class="container mx-auto px-8">
+                <h2 class="text-4xl font-semibold font-display text-primary text-center mb-12">
+                    Our Study Modes
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <ng-container *ngFor="let mode of studyModes">
+                        <div class="bg-white rounded-lg p-6 shadow-lg transition-shadow duration-300">
+                            <div class="flex items-center justify-center mb-6">
+                                <i [class]="mode.icon" [ngClass]="mode.iconColor + ' text-5xl'"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary text-center">{{ mode.title }}</h3>
+                            <p class="mt-4 text-primary text-center">{{ mode.description }}</p>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

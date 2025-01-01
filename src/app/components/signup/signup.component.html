@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <div class="flex justify-center items-center h-screen">
+        <div class="relative hidden md:flex sm:w-full h-full">
+            <img src="assets/cards.jpg" alt="cards" loading="lazy" class="object-cover w-full h-full">
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <p class="text-white text-2xl text-center m-16 font-bold font-display">"The beautiful thing about
+                    learning
+                    is that
+                    nobody can
+                    take it
+                    away from
+                    you." -
+                    B.B. King
+                </p>
+            </div>
+        </div>
+        <div class="h-full w-full bg-gradient-to-br from-sky-100 via-sky-200 to-sky-100">
+            <a href="#" class="flex gap-2 justify-center items-center my-6">
+                <img src="assets/logo.png" alt="logo" class="max-w-12 max-h-12">
+                <span class="text-4xl font-bold font-display text-primary sm:text-5xl">FlashMinds</span>
+            </a>
+            <h1 class="text-3xl font-body font-bold flex justify-center items-center text-primary mt-12">
+                @if (isSignUp) {
+                Sign Up
+                } @else{
+                Log In
+                }
+            </h1>
+            <div id="forms">
+                @if (isSignUp) {
+                <div id="signup-form" [@floatUpAnimation]>
+                    <form [formGroup]="userSignUpForm" class="flex-col justify-center items-center md:mx-20 mx-10 mb-4">
+
+                        <p class="font-body font-bold text-primary py-2">Email</p>
+                        <input type="email" name="email" placeholder="Enter your email address" formControlName="email"
+                            class="p-4 bg-gray-300 border rounded-md border-gray-300 w-full h-12 hover:border-gray-500">
+                        @if (userSignUpForm.get('email')?.touched && userSignUpForm.get('email')?.hasError('required')){
+                        <span class="text-red-600">Email is required</span>
+                        }
+                        @if (userSignUpForm.get('email')?.touched && userSignUpForm.get('email')?.hasError('email')){
+                        <span class="text-red-600">Please enter a valid email address</span>
+                        }
+
+                        <p class="font-body font-bold text-primary mt-4 py-2">Username</p>
+                        <input type="text" name="username" placeholder="Enter your username" formControlName="username"
+                            class="p-4 bg-gray-300 border rounded-md border-gray-300 w-full h-12 hover:border-gray-500">
+                        @if(userSignUpForm.get('username')?.touched &&
+                        userSignUpForm.get('username')?.hasError('required')){
+                        <span class="text-red-600">Username is required</span>
+                        }
+                        @if(userSignUpForm.get('username')?.touched &&
+                        userSignUpForm.get('username')?.hasError('minlength')){
+                        <span class="text-red-600">Username should be atleast 3 characters</span>
+                        }
+
+                        <p class="font-body font-bold text-primary mt-4 py-2">Password</p>
+                        <input type="password" name="password" placeholder="Set a password" formControlName="password"
+                            class="p-4 bg-gray-300 border rounded-md border-gray-300 w-full h-12 hover:border-gray-500">
+                        @if(userSignUpForm.get('password')?.touched &&
+                        userSignUpForm.get('password')?.hasError('required')){
+                        <span class="text-red-600">Password is required</span>
+                        }
+                        @if(userSignUpForm.get('password')?.touched &&
+                        userSignUpForm.get('password')?.hasError('minlength')){
+                        <span class="text-red-600">Password should be atleast 6 characters</span>
+                        }
+                        @if(userSignUpForm.get('password')?.touched &&
+                        userSignUpForm.get('password')?.hasError('pattern') &&
+                        !userSignUpForm.get('password')?.hasError('minlength')){
+                        <span class="text-red-600">Password must contain letters, numbers & symbol</span>
+                        }
+
+                        <button type="submit"
+                            class="bg-secondary w-full h-12 mt-8 font-body text-white font-bold border rounded-lg hover:bg-opacity-90 active:scale-95 transition-transform"
+                            (click)="saveNewUser()">
+                            @if(isLoadingSignUp){
+                            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-white"></i>
+                            } @else{
+                            Sign Up
+                            }
+                        </button>
+
+                        <span *ngIf="cantSignIn"
+                            class="flex justify-center items-center text-red-600 font-body pt-4">Please
+                            try
+                            again</span>
+
+                    </form>
+                    <div class="flex justify-center items-center">
+                        <span class="text-primary">Already registered?
+                            <a class="text-primary font-bold cursor-pointer" (click)="toggleForm()">Log In</a>
+                        </span>
+                    </div>
+                </div>
+                }
+                @else{
+                <div id="login-form" [@floatUpAnimation]>
+                    <form [formGroup]="userLoginForm" class="flex-col justify-center items-center md:mx-20 mx-10 mb-4">
+
+                        <p class="font-body font-bold text-primary py-2">Email</p>
+                        <input type="email" name="email" placeholder="Enter your email address" formControlName="email"
+                            class="p-4 bg-gray-300 border rounded-md border-gray-300 w-full h-12 hover:border-gray-500">
+                        @if(userLoginForm.get('email')?.touched && userLoginForm.get('email')?.hasError('required')){
+                        <span class="text-red-600">Email is required</span>
+                        }
+                        @if(userLoginForm.get('email')?.touched && userLoginForm.get('email')?.hasError('email')){
+                        <span class="text-red-600">Please enter a valid email address</span>
+                        }
+
+                        <p class="font-body font-bold text-primary mt-4 py-2">Password</p>
+                        <input type="password" name="password" placeholder="Enter your password"
+                            formControlName="password"
+                            class="p-4 bg-gray-300 border rounded-md border-gray-300 w-full h-12 hover:border-gray-500">
+                        @if(userLoginForm.get('password')?.touched &&
+                        userLoginForm.get('password')?.hasError('required')){
+                        <span class="text-red-600">Password is required</span>
+                        }
+
+                        <button type="submit"
+                            class="bg-secondary w-full h-12 mt-8 font-body text-white font-bold border rounded-lg hover:bg-opacity-90 active:scale-95 transition-transform"
+                            (click)="logUser()">
+                            @if(isLoadingLogIn){
+                            <i class="fa-solid fa-circle-notch fa-spin text-3xl text-white"></i>
+                            } @else{
+                            Log In
+                            }
+                        </button>
+                        <span *ngIf="cantLogIn"
+                            class="flex justify-center items-center text-red-600 font-body pt-4">Please
+                            try
+                            again</span>
+                    </form>
+                    <div class="flex justify-center items-center">
+                        <span class="text-primary">New here?
+                            <a class="text-primary font-bold cursor-pointer" (click)="toggleForm()">Sign Up</a>
+                        </span>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="p-3 flex justify-between items-center bg-background">
+        <a href="#" class="flex gap-2 items-center flex-1 pl-0 sm:pl-4">
+            <img src="assets/logo.png" alt="logo" class="max-w-12 max-h-12">
+            <span class="text-4xl font-bold font-display text-primary">FlashMinds</span>
+        </a>
+        <div id="nav-menu" class="items-center hidden md:flex gap-12 pr-8">
+            <div class="flex gap-2 items-center">
+                <i class="fa-solid fa-fire text-orange-600 text-3xl"></i>
+                <p>Streak: {{streak()}}</p>
+            </div>
+            <button routerLink="/dashboard/explore"
+                class="font-display font-semibold text-primary hover:text-secondary">Explore</button>
+            <button routerLink="/create-set"
+                class="font-display font-semibold text-primary hover:text-secondary">Create</button>
+            <button (click)="logOutUser()"
+                class="items-center flex gap-2 border border-secondary px-4 py-2 rounded-lg text-secondary hover:border-secondary hover:bg-secondary hover:text-white">
+                <span>Log Out</span>
+            </button>
+        </div>
+        <button class="md:hidden p-2 text-xl" (click)="toggleMenu()">
+            <i class="fa-solid fa-bars text-primary"></i>
+        </button>
+
+        <!-- menu section -->
+        <div *ngIf="isMenuOpened" class="fixed bg-background inset-0 p-3">
+            <div id="nav-bar" class="flex justify-between pl-2">
+                <a href="#" class="flex gap-2 items-center flex-1">
+                    <img src="assets/logo.png" alt="logo" class="max-w-12 max-h-12">
+                    <span class="text-4xl font-bold font-display text-primary">FlashMinds</span>
+                </a>
+                <button class="md:hidden p-2 text-xl" (click)="toggleMenu()">
+                    <i class="fa-solid fa-xmark text-primary"></i>
+                </button>
+            </div>
+            <div class="p-4 flex flex-col gap-4">
+                <button routerLink="/dashboard/explore"
+                    class="font-display text-lg text-primary hover:bg-gray-200 p-4 rounded-lg text-start">Explore</button>
+                <button routerLink="/create-set"
+                    class="font-display text-lg text-primary hover:bg-gray-200 p-4 rounded-lg text-start">Create</button>
+                <div class="h-[1px] bg-gray-800 m-2"></div>
+                <button (click)="logOutUser()"
+                    class="items-center flex gap-2 p-4 rounded-lg text-primary hover:bg-gray-200">
+                    <span>Log Out</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+</body>
+
+</html>

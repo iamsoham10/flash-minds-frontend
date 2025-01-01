@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore</title>
+</head>
+
+<body>
+    <app-navbar></app-navbar>
+    <main>
+        <h1 class="text-3xl sm:text-4xl font-display text-primary mt-12 text-center font-bold">Explore FlashCards
+        </h1>
+        <section>
+            <div id="subject-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-0 sm:m-5">
+                <div *ngFor="let category of categories" class="m-12 bg-card rounded-xl font-body">
+                    <p class="text-2xl font-semibold text-primary pt-8 text-center">{{category}}</p>
+                    <div class="flex flex-col items-start mx-4 my-6 sm:m-6 text-xl"
+                        *ngFor="let subject of categorizedSubjects[category]">
+                        <button [routerLink]="['/dashboard/explore/study', subject]"
+                            class="hover:text-secondary">{{subject}}</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

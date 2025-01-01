@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study</title>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans">
+    <app-navbar></app-navbar>
+
+    <!-- main flashcard study page -->
+    <main *ngIf="showCardDiv">
+        <h1
+            class="flex items-center justify-center text-4xl font-display text-primary mt-12 font-bold text-center px-4">
+            {{filteredCardList[currentCardIndex]?.subject}}
+        </h1>
+
+        <div class="flex justify-center items-center flex-col md:flex-row h-auto mt-8 gap-16 px-4">
+            <button (click)="showTest()"
+                class="bg-purple-500 h-32 w-52 rounded-lg hover:opacity-80 font-body text-xl text-white">
+                Test
+            </button>
+            <button (click)="showPractice()"
+                class="bg-blue-500 h-32 w-52 rounded-lg hover:opacity-80 font-body text-xl text-white">
+                Practice
+            </button>
+            <button (click)="showMatch()"
+                class="bg-red-500 h-32 w-52 rounded-lg hover:opacity-80 font-body text-xl text-white">
+                Match
+            </button>
+        </div>
+
+        <div (click)="toggleFlip()" class="flex justify-center items-center mt-12 px-4">
+            <div class="card h-64 w-full max-w-3xl text-center" [@flipState]="flip">
+                <div class="card-face front bg-card p-8 rounded-lg shadow-md">
+                    <p class="text-center font-bold font-body text-2xl">
+                        {{filteredCardList[currentCardIndex]?.term}}
+                    </p>
+                </div>
+                <div class="card-face back bg-sub_card p-8 rounded-lg shadow-md">
+                    <p class="text-center font-bold font-body text-xl">
+                        {{ filteredCardList[currentCardIndex]?.definition }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-8 mt-6 mb-8 text-xl px-4">
+            <button (click)="previousCard()"
+                class="bg-gray-400 rounded-full p-4 flex justify-center items-center hover:opacity-80 focus:ring-4 focus:ring-gray-300 transition"
+                [disabled]="currentCardIndex === 0">
+                <i class="fa-solid fa-arrow-left text-primary hover:text-secondary"></i>
+            </button>
+
+            <p class="text-center text-xl text-gray-700">
+                {{ currentCardIndex + 1 }} / {{ filteredCardList.length }}
+            </p>
+
+            <button (click)="nextCard()"
+                class="bg-gray-400 rounded-full p-4 flex justify-center items-center hover:opacity-80 focus:ring-4 focus:ring-gray-300 transition"
+                [disabled]="currentCardIndex === filteredCardList.length - 1">
+                <i class="fa-solid fa-arrow-right text-primary hover:text-secondary"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- test/quiz page -->
+    <section *ngIf="showTestDiv" id="quiz-test" class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <h1
+            class="flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-display text-primary mt-12 mb-6 font-bold text-center">
+            Test
+        </h1>
+        <form [formGroup]="quizTestForm">
+            <div formArrayName="answers">
+                <div *ngFor="let card of filteredCardList; let i = index" class="bg-primary rounded-xl mb-8">
+                    <div class="flex flex-row justify-between items-center text-white font-body text-lg sm:text-xl p-6">
+                        <p>Term</p>
+                        <p>{{ currentCardIndex + 1 + i }} / {{ filteredCardList.length }}</p>
+                    </div>
+                    <div class="flex flex-col text-white font-body">
+                        <p class="text-lg sm:text-2xl font-semibold p-6 mb-10 sm:mb-20">{{ card.term }}</p>
+                        <p class="px-6 mb-4">Your Answer</p>
+                        <input type="text" name="definition" placeholder="Enter answer" [formControlName]="i"
+                            class="bg-gray-300 rounded-lg text-black px-4 sm:px-6 py-2 sm:py-3 mx-4 sm:mx-6 mb-4 sm:mb-8" />
+                        @if (quizTestForm.get('answers')?.get(i.toString())?.invalid &&
+                        quizTestForm.get('answers')?.get(i.toString())?.touched) {
+                        <span class="text-red-600 ml-4 sm:ml-6 mb-4 sm:mb-8">Please fill all the fields</span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-center text-lg sm:text-xl font-body text-white bg-primary rounded-lg m-6 sm:m-12 px-4 sm:px-6 py-2 sm:py-3 hover:opacity-80 hover:cursor-pointer"
+                (click)="testResult()">
+                @if(isResultCalculated){
+                <i class="fa-solid fa-circle-notch fa-spin text-3xl text-white"></i>
+                } @else {
+                Submit
+                }
+            </div>
+
+        </form>
+
+        <div *ngIf="showTestResultDiv" id="result"
+            class="relative flex flex-col sm:flex-row items-center justify-center text-lg sm:text-md font-body text-primary m-6 sm:m-12 px-4 gap-4">
+            <div>
+                <h3>Correct </h3>
+                <h3>Incorrect </h3>
+                <h3>Percentage </h3>
+            </div>
+            <div>
+                <p>{{ correctTestAnswers }}</p>
+                <p>{{ incorrectTestAnswers }}</p>
+                <p>{{ testPercentage }}%</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- match page -->
+    <section *ngIf="showMatchDiv">
+        <h1
+            class="flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-display text-primary mt-12 mb-6 font-bold text-center">
+            Match
+        </h1>
+        <p class="text-center text-xl font-body text-primary mx-6">Match all the terms with their definitions</p>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-4 my-8 sm:mx-16">
+            <div *ngFor="let item of shuffledPairs"
+                class="flex justify-center items-center bg-card border text-lg rounded-lg p-6 font-semibold cursor-pointer"
+                [ngClass]="{'bg-secondary text-white': selectedItems.includes(item), 'bg-card': !selectedItems.includes(item)}"
+                (click)="handleSelection(item)">
+                {{ item.value }}
+            </div>
+        </div>
+
+    </section>
+
+    <!-- practice page -->
+    <section *ngIf="showPracticeDiv">
+        <h1
+            class="flex items-center justify-center text-2xl sm:text-3xl md:text-4xl font-display text-primary mt-12 mb-6 font-bold text-center">
+            Practice
+        </h1>
+        <div>
+            @for(card of filteredCardListSignal(); track card?._id; let i = $index){
+            <div class="bg-primary rounded-xl mb-16 mx-6 md:mx-40">
+                <div class="flex flex-row justify-between items-center text-white font-body text-lg sm:text-xl p-6">
+                    <p>Term</p>
+                    <p>{{ i + 1}} / {{ $count }}</p>
+                </div>
+                <div class="flex flex-col text-white font-body">
+                    <p class="text-lg sm:text-2xl font-semibold pl-6">{{card.term}}</p>
+
+                    <div *ngIf="cardStates.get(card._id)?.showAnswerDiv" class="pl-6 mt-8">
+                        <p class="text-xl">Answer</p>
+                        <p class="font-semibold text-lg sm:text-2xl mt-4 mb-4">{{card.definition}}</p>
+                    </div>
+
+                    <div *ngIf="cardStates.get(card._id)?.showAnswerButton" class="flex justify-center items-center">
+                        <button (click)="showAnswer(card._id)"
+                            class="border rounded-lg text-white px-6 py-3 mt-16 mb-8 hover:bg-white hover:text-primary hover:border-primary">Show
+                            Answer</button>
+                    </div>
+
+                    <div *ngIf="cardStates.get(card._id)?.showButtonDiv" class="flex justify-center items-center gap-6">
+                        <button (click)="markAsLearned(card._id, true)"
+                            class="border rounded-lg text-white px-6 py-3 mt-16 mb-8 w-40 hover:bg-white hover:text-primary hover:border-primary">Got
+                            it?</button>
+                        <button (click)="markAsLearned(card._id, false)"
+                            class="border rounded-lg text-white px-6 py-3 mt-16 mb-8 w-40 hover:bg-white hover:text-primary hover:border-primary">Didn't
+                            get it</button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </section>
+
+</body>
+
+</html>
