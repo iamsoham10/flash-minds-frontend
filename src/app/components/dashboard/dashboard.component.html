@@ -48,7 +48,7 @@
                     <p class="text-gray-600">{{getCardCountBySubject(subject)}} Cards</p>
                     <button
                         class="mt-4 text-white bg-secondary px-4 py-2 rounded-lg hover:bg-secondary-dark transition-colors"
-                        [routerLink]="['/dashboard/explore/study', subject]">
+                        [routerLink]="['/dashboard/explore/study', subject]" [queryParams]="{explore: 'false'}">
                         Study Now
                     </button>
                 </div>

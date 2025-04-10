@@ -108,12 +108,21 @@ export class StudyComponent implements OnInit {
       this.router.navigate(['/auth']);
     }
     const user_id = decodedToken.user_id;
-    this.getCardService.getExploreCards().subscribe({
+
+    // Check if we're on the explore page
+    const isExplorePage = this.route.snapshot.queryParams['explore'] === 'true';
+
+    // Choose which method to call based on whether we're on explore page or not
+    const observable = isExplorePage ? 
+      this.getCardService.getExploreCards() : 
+      this.getCardService.getCards(user_id);
+
+    observable.subscribe({
       next: (data) => {
+        console.log("hello")
         this.cardList = data.cards;
         this.subject = this.route.snapshot.paramMap.get('subject') || '';
         this.filteredCardList = this.cardList.filter(card => card.subject === this.subject);
-        // console.log('Filtered cards: ', this.filteredCardList);
         this.initializeForm();
       },
       error: (err) => {
